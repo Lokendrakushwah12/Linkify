@@ -1,7 +1,6 @@
 import { ArrowRightIcon } from "lucide-react";
 import URLContainer from "../components/url-container";
 import AnimationContainer from "@/components/animation-container";
-import Background from "@/components/ui/background";
 import AnimatedBackground from "@/components/ui/animated-background";
 export default function Home() {
   return (

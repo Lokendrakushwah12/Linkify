@@ -15,12 +15,12 @@ interface UrlListProps {
 const UrlList = () => {
   const [urls, setUrls] = React.useState<UrlListProps[]>([]);
 
+
   const fetchUrls = async () => {
     try {
       const response = await fetch("/api/urls");
       const data = await response.json();
       setUrls(data);
-      console.log("URLs", data);
     } catch (error) {
       console.error("Failed to fetch URLs:", error);
     }
@@ -43,7 +43,7 @@ const UrlList = () => {
               key={index}
               className="flex bg-primary p-2 py-1 items-center w-full justify-between"
             >
-              <Link href={data.originalUrl} className="hover:underline">
+              <Link href={`/${data.shortUrl}`} className="hover:underline">
                 {process.env.NEXT_PUBLIC_BASE_URL}/{data.shortUrl}
               </Link>
               <div className="flex gap-2 items-center justify-center">

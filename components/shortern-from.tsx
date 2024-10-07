@@ -18,7 +18,7 @@ const ShorternForm = () => {
         },
         body: JSON.stringify({ url }),
       });
-      const data = await response.json();
+      await response.json();
       setUrl("");
     } catch (error) {
       console.error("Failed to shorten URL:", error);
