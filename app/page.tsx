@@ -9,7 +9,6 @@ export default function Home() {
         numSquares={6}
         maxOpacity={0.2}
         duration={10}
-        repeatDelay={10}
       />
       <AnimationContainer className="flex -mt-[100px] flex-col items-center justify-start w-full text-center">
         <div className="space-y-2 flex flex-col justify-start items-center text-center">
