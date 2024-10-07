@@ -6,9 +6,23 @@ import { Button } from "./ui/button";
 const ShorternForm = () => {
   const [url, setUrl] = React.useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Shorten URL", url);
+
+    try {
+      const response = await fetch("/api/shorten", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      setUrl("");
+    } catch (error) {
+      console.error("Failed to shorten URL:", error);
+    }
   };
 
   return (
