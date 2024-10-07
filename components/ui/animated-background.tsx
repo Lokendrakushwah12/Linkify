@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useId, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState, useCallback } from "react";
 
 interface Props {
     width?: number;
@@ -30,21 +30,24 @@ export function AnimatedBackground({
     const id = useId();
     const containerRef = useRef<SVGSVGElement | null>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-    const [squares, setSquares] = useState(() => generateSquares(numSquares));
 
-    function getPos() {
+    // Move these function definitions above useState
+    const getPos = useCallback(() => {
         return [
             Math.floor((Math.random() * dimensions.width) / width),
             Math.floor((Math.random() * dimensions.height) / height),
         ];
-    }
+    }, [dimensions, width, height]);
 
-    function generateSquares(count: number) {
+    const generateSquares = useCallback((count: number) => {
         return Array.from({ length: count }, (_, i) => ({
             id: i,
             pos: getPos(),
         }));
-    }
+    }, [getPos]);
+
+    // Initialize squares state using the generateSquares function
+    const [squares, setSquares] = useState(() => generateSquares(numSquares));
 
     const updateSquarePosition = (id: number) => {
         setSquares((currentSquares) =>
@@ -63,7 +66,7 @@ export function AnimatedBackground({
         if (dimensions.width && dimensions.height) {
             setSquares(generateSquares(numSquares));
         }
-    }, [dimensions, numSquares]); // Added numSquares to the dependency array
+    }, [dimensions, numSquares, generateSquares]); // Added generateSquares to the dependency array
 
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {

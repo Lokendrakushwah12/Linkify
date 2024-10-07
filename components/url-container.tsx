@@ -4,7 +4,7 @@ import ShorternForm from "./shortern-from";
 import UrlList from "./url-list";
 import AnimationContainer from "./animation-container";
 
-const urlContainer = () => {
+const UrlContainer = () => {
   const [refreshKey, setRefreshKey] = React.useState(0);
 
   const handleUrlCreated = () => {
@@ -23,4 +23,4 @@ const urlContainer = () => {
   );
 };
 
-export default urlContainer;
+export default UrlContainer;
