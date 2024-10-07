@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
       originalUrl: url,
       shortUrl,
     },
-  });
-
+  })
+ 
   return NextResponse.json({ shortUrl: shorternUrl.shortUrl });
 }
