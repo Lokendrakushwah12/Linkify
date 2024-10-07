@@ -6,7 +6,7 @@ import { Button } from "./ui/button";
 const UrlList = () => {
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-2">Recently Added URLs</h2>
+      <h2 className="text-2xl font-[500] mb-2">Recently Added URLs</h2>
       <ul className="space-y-2">
         {[...Array(5)].map((_, i) => (
           <li className="flex bg-primary p-2 py-1 rounded-lg items-center w-full justify-between">
@@ -16,7 +16,7 @@ const UrlList = () => {
             <div className="flex gap-2 items-center justify-center">
               <div className="flex gap-1 items-center justify-center">
                 <EyeIcon className="w-4 h-4 text-muted-foreground" />
-                <div className="text-muted-foreground">5 views</div>
+                <div className="text-muted-foreground mono">5 views</div>
               </div>
               <Button
                 variant="ghost"
