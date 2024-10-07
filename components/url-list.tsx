@@ -1,5 +1,5 @@
 "use client";
-import { CheckIcon, CopyIcon, Eye, EyeIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, EyeIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
@@ -45,9 +45,9 @@ const UrlList = () => {
       <h2 className="text-2xl font-[500] mb-2">Recently Added URLs</h2>
       <ul className="space-y-2">
         {urls.map((data, index) => (
-          <MagicCard>
+          <MagicCard key={index}>
             <li
-              key={index}
+            //   key={data.id}
               className="flex bg-primary p-2 py-1 items-center w-full justify-between"
             >
               <Link href={`/${data.shortUrl}`} className="hover:underline">

@@ -8,7 +8,7 @@ interface Props {
     height?: number;
     x?: number;
     y?: number;
-    strokeDasharray?: any;
+    strokeDasharray?: string | number; // Use more specific types
     numSquares?: number;
     className?: string;
     maxOpacity?: number;
@@ -30,7 +30,7 @@ export function AnimatedBackground({
     ...props
 }: Props) {
     const id = useId();
-    const containerRef = useRef(null);
+    const containerRef = useRef<SVGSVGElement | null>(null);
     const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
     const [squares, setSquares] = useState(() => generateSquares(numSquares));
 
@@ -41,7 +41,6 @@ export function AnimatedBackground({
         ];
     }
 
-    // Adjust the generateSquares function to return objects with an id, x, and y
     function generateSquares(count: number) {
         return Array.from({ length: count }, (_, i) => ({
             id: i,
@@ -49,7 +48,6 @@ export function AnimatedBackground({
         }));
     }
 
-    // Function to update a single square's position
     const updateSquarePosition = (id: number) => {
         setSquares((currentSquares) =>
             currentSquares.map((sq) =>
@@ -63,17 +61,15 @@ export function AnimatedBackground({
         );
     };
 
-    // Update squares to animate in
     useEffect(() => {
         if (dimensions.width && dimensions.height) {
             setSquares(generateSquares(numSquares));
         }
-    }, [dimensions, numSquares]);
+    }, [dimensions, numSquares]); // Added numSquares to the dependency array
 
-    // Resize observer to update container dimensions
     useEffect(() => {
         const resizeObserver = new ResizeObserver((entries) => {
-            for (let entry of entries) {
+            for (const entry of entries) {
                 setDimensions({
                     width: entry.contentRect.width,
                     height: entry.contentRect.height,
@@ -90,14 +86,13 @@ export function AnimatedBackground({
                 resizeObserver.unobserve(containerRef.current);
             }
         };
-    }, [containerRef]);
+    }, []); // No dependencies; only need to set up once
 
     return (
         <svg
             ref={containerRef}
             aria-hidden="true"
-            className=
-                "pointer-events-none absolute inset-0 h-full w-full fill-[rgba(0,0,0,0.01)] stroke-muted-foreground/20 [mask-image:radial-gradient(300px_circle_at_center,black,transparent)] md:[mask-image:radial-gradient(600px_circle_at_center,black,transparent)] inset-y-[-30%]"
+            className={`pointer-events-none absolute inset-0 h-full w-full fill-[rgba(0,0,0,0.01)] stroke-muted-foreground/20 [mask-image:radial-gradient(300px_circle_at_center,black,transparent)] md:[mask-image:radial-gradient(600px_circle_at_center,black,transparent)] inset-y-[-30%] ${className}`} // Added className support
             {...props}
         >
             <defs>
@@ -118,7 +113,7 @@ export function AnimatedBackground({
             </defs>
             <rect width="100%" height="100%" fill={`url(#${id})`} />
             <svg x={x} y={y} className="overflow-visible">
-                {squares.map(({ pos: [x, y], id }, index) => (
+                {squares.map(({ pos: [squareX, squareY], id }, index) => (
                     <motion.rect
                         initial={{ opacity: 0 }}
                         animate={{ opacity: maxOpacity }}
@@ -129,14 +124,13 @@ export function AnimatedBackground({
                             repeatType: "reverse",
                         }}
                         onAnimationComplete={() => updateSquarePosition(id)}
-                        key={`${x}-${y}-${index}`}
+                        key={`${squareX}-${squareY}-${id}`} // Changed to use `id` for uniqueness
                         width={width - 1}
                         height={height - 1}
-                        x={x * width + 1}
-                        y={y * height + 1}
+                        x={squareX * width + 1}
+                        y={squareY * height + 1}
                         fill="currentColor"
                         strokeWidth="0"
-                    // opacity={0.5}
                     />
                 ))}
             </svg>
