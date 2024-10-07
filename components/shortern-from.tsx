@@ -9,11 +9,13 @@ interface ShorternFormProps {
 const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
   const [url, setUrl] = React.useState("");
   const [error, setError] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Shorten URL", url);
     setError("");
+    setLoading(true);
 
     try {
       const response = await fetch("/api/shorten", {
@@ -34,6 +36,8 @@ const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
     } catch (error) {
       console.error("Failed to shorten URL:", error);
       setError("Failed to shorten URL, please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -49,8 +53,8 @@ const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
           required
         />
         {error && <p className="text-red-500">{error}</p>}
-        <Button variant="secondary" className="btn-primary">
-          Shorten
+        <Button variant="secondary" className="btn-primary" disabled={loading}>
+          {loading ? "Shortening..." : "Shorten"}
         </Button>
       </div>
     </form>

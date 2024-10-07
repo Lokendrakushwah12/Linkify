@@ -16,14 +16,18 @@ const UrlList = () => {
   const [urls, setUrls] = React.useState<UrlListProps[]>([]);
   const [isCopied, setIsCopied] = React.useState(false);
   const [copyUrl, setCopyUrl] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
 
   const fetchUrls = async () => {
+    setLoading(true);
     try {
       const response = await fetch("/api/urls");
       const data = await response.json();
       setUrls(data);
     } catch (error) {
       console.error("Failed to fetch URLs:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,45 +48,60 @@ const UrlList = () => {
     <div>
       <h2 className="text-2xl font-[500] mb-2">Recently Added URLs</h2>
       <ul className="space-y-2">
-        {Array.isArray(urls) &&
-          urls.map((data, index) => (
-            <MagicCard key={index}>
-              <li
-                //   key={data.id}
-                className="flex bg-primary p-2 py-1 items-center w-full justify-between"
-              >
-                <Link href={`/${data.shortUrl}`} className="hover:underline">
-                  {process.env.NEXT_PUBLIC_BASE_URL}/{data.shortUrl}
-                </Link>
-                <div className="flex gap-2 items-center justify-center">
-                  <div className="flex gap-1 items-center justify-center">
-                    <EyeIcon className="w-4 h-4 text-muted-foreground" />
-                    <div className="text-muted-foreground mono">
-                      {data.views} views
-                    </div>
-                  </div>
-                  <Button
-                    onClick={() =>
-                      handleCopy(
-                        `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}`
-                      )
-                    }
-                    variant="ghost"
-                    className="text-muted-foreground hover:text-muted-foreground hover:bg-accent/10"
-                    size="icon"
+        {loading ? (
+          <>
+            {Array(3)
+              .fill(0)
+              .map((_, index) => (
+                <div className="h-[44px] w-full bg-primary rounded-lg border-muted/10 border animate-pulse"></div>
+              ))}
+          </>
+        ) : (
+          <>
+            {Array.isArray(urls) &&
+              urls.map((data, index) => (
+                <MagicCard key={index}>
+                  <li
+                    //   key={data.id}
+                    className="flex bg-primary p-2 py-1 items-center w-full justify-between"
                   >
-                    {isCopied &&
-                    copyUrl ==
-                      `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}` ? (
-                      <CheckIcon className="w-4 h-4" />
-                    ) : (
-                      <CopyIcon className="w-4 h-4" />
-                    )}
-                  </Button>
-                </div>
-              </li>
-            </MagicCard>
-          ))}
+                    <Link
+                      href={`/${data.shortUrl}`}
+                      className="hover:underline"
+                    >
+                      {process.env.NEXT_PUBLIC_BASE_URL}/{data.shortUrl}
+                    </Link>
+                    <div className="flex gap-2 items-center justify-center">
+                      <div className="flex gap-1 items-center justify-center">
+                        <EyeIcon className="w-4 h-4 text-muted-foreground" />
+                        <div className="text-muted-foreground mono">
+                          {data.views} views
+                        </div>
+                      </div>
+                      <Button
+                        onClick={() =>
+                          handleCopy(
+                            `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}`
+                          )
+                        }
+                        variant="ghost"
+                        className="text-muted-foreground hover:text-muted-foreground hover:bg-accent/10"
+                        size="icon"
+                      >
+                        {isCopied &&
+                        copyUrl ==
+                          `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}` ? (
+                          <CheckIcon className="w-4 h-4" />
+                        ) : (
+                          <CopyIcon className="w-4 h-4" />
+                        )}
+                      </Button>
+                    </div>
+                  </li>
+                </MagicCard>
+              ))}
+          </>
+        )}
       </ul>
     </div>
   );
