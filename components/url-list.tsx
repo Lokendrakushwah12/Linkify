@@ -52,8 +52,8 @@ const UrlList = () => {
           <>
             {Array(3)
               .fill(0)
-              .map((_, index) => (
-                <div className="h-[44px] w-full bg-primary rounded-lg border-muted/10 border animate-pulse"></div>
+              .map((index) => (
+                <div key={index} className="h-[44px] w-full bg-primary rounded-lg border-muted/10 border animate-pulse"></div>
               ))}
           </>
         ) : (
