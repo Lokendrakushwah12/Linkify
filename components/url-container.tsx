@@ -4,7 +4,7 @@ import UrlList from "./url-list";
 
 const urlContainer = () => {
   return (
-    <div className="text-accent">
+    <div className="text-accent space-y-4">
       <ShorternForm />
       <UrlList />
     </div>
