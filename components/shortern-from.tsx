@@ -31,7 +31,7 @@ const ShorternForm = () => {
         <Input
           type="text"
           placeholder="Enter your URL here"
-          className="border-muted-foreground/30 hover:border-muted-foreground/50"
+          className="border-muted-foreground/30 bg-primary hover:border-muted-foreground/50"
           onChange={(e) => setUrl(e.target.value)}
           value={url}
           required

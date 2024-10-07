@@ -5,7 +5,7 @@ import AnimationContainer from "./animation-container";
 
 const urlContainer = () => {
   return (
-    <div className="text-accent space-y-4">
+    <div className="text-accent space-y-4 md:px-0 px-4">
       <AnimationContainer delay={0.1}>
         <ShorternForm />
       </AnimationContainer>

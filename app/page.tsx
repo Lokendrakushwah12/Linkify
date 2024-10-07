@@ -1,10 +1,18 @@
 import { ArrowRightIcon } from "lucide-react";
 import URLContainer from "../components/url-container";
 import AnimationContainer from "@/components/animation-container";
+import Background from "@/components/ui/background";
+import AnimatedBackground from "@/components/ui/animated-background";
 export default function Home() {
   return (
-    <main className="mx-auto max-w-xl py-12 md:py-24 space-y-12">
-      <AnimationContainer className="flex flex-col items-center justify-start w-full text-center">
+    <main className="mx-auto max-w-xl space-y-12">
+      <AnimatedBackground
+        numSquares={6}
+        maxOpacity={0.2}
+        duration={10}
+        repeatDelay={10}
+      />
+      <AnimationContainer className="flex -mt-[100px] flex-col items-center justify-start w-full text-center">
         <div className="space-y-2 flex flex-col justify-start items-center text-center">
           <button className="group relative grid overflow-hidden rounded-full px-4 py-1 shadow-[0_1000px_0_0_hsl(0_0%_20%)_inset] transition-colors duration-200">
             <span>
