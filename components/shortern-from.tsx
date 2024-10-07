@@ -8,10 +8,12 @@ interface ShorternFormProps {
 }
 const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
   const [url, setUrl] = React.useState("");
+  const [error, setError] = React.useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Shorten URL", url);
+    setError("");
 
     try {
       const response = await fetch("/api/shorten", {
@@ -22,10 +24,16 @@ const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
         body: JSON.stringify({ url }),
       });
       await response.json();
+
+      if (response.status === 400) {
+        setError("URL already exists");
+        return;
+      }
       handleUrlCreated();
       setUrl("");
     } catch (error) {
       console.error("Failed to shorten URL:", error);
+      setError("Failed to shorten URL, please try again.");
     }
   };
 
@@ -40,6 +48,7 @@ const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
           value={url}
           required
         />
+        {error && <p className="text-red-500">{error}</p>}
         <Button variant="secondary" className="btn-primary">
           Shorten
         </Button>
