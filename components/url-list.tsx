@@ -17,13 +17,16 @@ const UrlList = () => {
   const [isCopied, setIsCopied] = React.useState(false);
   const [copyUrl, setCopyUrl] = React.useState("");
   const [loading, setLoading] = React.useState(false);
+  const [page, setPage] = React.useState(1); // Track the current page
+  const [totalPages, setTotalPages] = React.useState(0); // Total pages
 
-  const fetchUrls = async () => {
+  const fetchUrls = async (page: number) => {
     setLoading(true);
     try {
-      const response = await fetch("/api/urls");
+      const response = await fetch(`/api/urls?page=${page}&limit=5`);
       const data = await response.json();
-      setUrls(data);
+      setUrls(data.data);
+      setTotalPages(Math.ceil(data.total / data.limit)); // Calculate total pages
     } catch (error) {
       console.error("Failed to fetch URLs:", error);
     } finally {
@@ -42,10 +45,23 @@ const UrlList = () => {
   };
 
   React.useEffect(() => {
-    fetchUrls();
-  }, []);
+    fetchUrls(page);
+  }, [page]);
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
+    }
+  };
+
   return (
-    <div>
+    <div className="pb-12">
       <h2 className="text-2xl font-[500] mb-2">Recently Added URLs</h2>
       <ul className="space-y-2">
         {loading ? (
@@ -55,10 +71,7 @@ const UrlList = () => {
             {Array.isArray(urls) &&
               urls.map((data, index) => (
                 <MagicCard key={index}>
-                  <li
-                    //   key={data.id}
-                    className="flex bg-primary p-2 py-1 items-center w-full justify-between"
-                  >
+                  <li className="flex bg-primary p-2 py-1 items-center w-full justify-between">
                     <Link
                       href={`/${data.shortUrl}`}
                       className="hover:underline"
@@ -84,7 +97,7 @@ const UrlList = () => {
                         size="icon"
                       >
                         {isCopied &&
-                        copyUrl ==
+                        copyUrl ===
                           `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}` ? (
                           <CheckIcon className="w-4 h-4" />
                         ) : (
@@ -98,6 +111,14 @@ const UrlList = () => {
           </>
         )}
       </ul>
+      <div className="flex justify-between mt-4">
+        <Button onClick={handlePreviousPage} disabled={page === 1}>
+          Previous
+        </Button>
+        <Button onClick={handleNextPage} disabled={page === totalPages}>
+          Next
+        </Button>
+      </div>
     </div>
   );
 };
