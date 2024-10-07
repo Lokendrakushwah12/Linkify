@@ -49,13 +49,7 @@ const UrlList = () => {
       <h2 className="text-2xl font-[500] mb-2">Recently Added URLs</h2>
       <ul className="space-y-2">
         {loading ? (
-          <>
-            {Array(3)
-              .fill(0)
-              .map((index) => (
-                <div key={index} className="h-[44px] w-full bg-primary rounded-lg border-muted/10 border animate-pulse"></div>
-              ))}
-          </>
+          <div className="h-[44px] w-full bg-primary rounded-lg border-muted/10 border animate-pulse"></div>
         ) : (
           <>
             {Array.isArray(urls) &&
@@ -68,6 +62,7 @@ const UrlList = () => {
                     <Link
                       href={`/${data.shortUrl}`}
                       className="hover:underline"
+                      target="_blank"
                     >
                       {process.env.NEXT_PUBLIC_BASE_URL}/{data.shortUrl}
                     </Link>
