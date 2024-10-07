@@ -13,7 +13,6 @@ interface Props {
     className?: string;
     maxOpacity?: number;
     duration?: number;
-    repeatDelay?: number;
 }
 
 export function AnimatedBackground({
@@ -26,7 +25,6 @@ export function AnimatedBackground({
     className,
     maxOpacity = 0.5,
     duration = 4,
-    repeatDelay = 0.5,
     ...props
 }: Props) {
     const id = useId();
@@ -77,13 +75,14 @@ export function AnimatedBackground({
             }
         });
 
-        if (containerRef.current) {
-            resizeObserver.observe(containerRef.current);
+        const currentRef = containerRef.current; // Store ref in a local variable
+        if (currentRef) {
+            resizeObserver.observe(currentRef);
         }
 
         return () => {
-            if (containerRef.current) {
-                resizeObserver.unobserve(containerRef.current);
+            if (currentRef) {
+                resizeObserver.unobserve(currentRef);
             }
         };
     }, []); // No dependencies; only need to set up once
