@@ -3,7 +3,10 @@ import React from "react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 
-const ShorternForm = () => {
+interface ShorternFormProps {
+  handleUrlCreated: () => void;
+}
+const ShorternForm = ({ handleUrlCreated }: ShorternFormProps) => {
   const [url, setUrl] = React.useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -19,6 +22,7 @@ const ShorternForm = () => {
         body: JSON.stringify({ url }),
       });
       await response.json();
+      handleUrlCreated();
       setUrl("");
     } catch (error) {
       console.error("Failed to shorten URL:", error);
