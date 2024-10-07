@@ -48,13 +48,14 @@ const MagicCard = ({ children, className }: Props) => {
       onBlur={handleBlur}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className="relative overflow-hidden rounded-lg border-[0.5px] border-muted-foreground/20"
+      tabIndex={0} // Make it focusable
+      className={`relative overflow-hidden rounded-lg border-[0.5px] border-muted-foreground/20 ${className}`}
     >
       <div
-        className="pointer-events-none absolute -inset-px opacity-0 transition duration-300"
+        className="pointer-events-none absolute -inset-px transition duration-300"
         style={{
           opacity,
-          background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, rgba(168,85,247,.15), transparent 60%)`,
+          background: `radial-gradient(300px circle at ${position.x}px ${position.y}px, rgba(168, 85, 247, 0.15), transparent 60%)`,
         }}
       />
       {children}
