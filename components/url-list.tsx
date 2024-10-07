@@ -1,5 +1,5 @@
 "use client";
-import { CopyIcon, Eye, EyeIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, Eye, EyeIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { Button } from "./ui/button";
@@ -14,7 +14,8 @@ interface UrlListProps {
 
 const UrlList = () => {
   const [urls, setUrls] = React.useState<UrlListProps[]>([]);
-
+  const [isCopied, setIsCopied] = React.useState(false);
+  const [copyUrl, setCopyUrl] = React.useState("");
 
   const fetchUrls = async () => {
     try {
@@ -28,6 +29,12 @@ const UrlList = () => {
 
   const handleCopy = (url: string) => {
     navigator.clipboard.writeText(url);
+    setIsCopied(true);
+    setCopyUrl(url);
+    setTimeout(() => {
+      setIsCopied(false);
+      setCopyUrl("");
+    }, 2000);
   };
 
   React.useEffect(() => {
@@ -63,7 +70,13 @@ const UrlList = () => {
                   className="text-muted-foreground hover:text-muted-foreground hover:bg-accent/10"
                   size="icon"
                 >
-                  <CopyIcon className="w-4 h-4" />
+                  {isCopied &&
+                  copyUrl ==
+                    `${process.env.NEXT_PUBLIC_BASE_URL}/${data.shortUrl}` ? (
+                    <CheckIcon className="w-4 h-4" />
+                  ) : (
+                    <CopyIcon className="w-4 h-4" />
+                  )}
                 </Button>
               </div>
             </li>
