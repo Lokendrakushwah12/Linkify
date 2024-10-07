@@ -101,3 +101,8 @@ body {
   background-color: hsl(var(--secondary));
   color: hsl(var(--primary));
 }
+
+body .modal-open {
+  overflow: hidden;
+  padding-right: 15px;
+}
